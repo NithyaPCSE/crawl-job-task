@@ -1,0 +1,82 @@
+# version: '4.7.1'
+
+x-common-variables: &common-variables
+  APP_DATABASE: crawling
+  DB_USER: DB_USER
+  DB_PASS: DB_PASS
+  COMPOSE_PROJECT_NAME: "Crawling Jobs"
+
+services:
+  postgresql_db:
+    container_name: postgre
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=crawling
+      - DATABASE_ADMIN_USERNAME=postgres
+      - TWX_DATABASE_USERNAME=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgressql/data
+      - ./log-directory:/var/lib/postgresql/data
+
+  nginx:
+    container_name: Server
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+
+  api:
+    container_name: Node_Server
+    build:
+      dockerfile: Dockerfile
+      context: "./server"
+    depends_on:
+      - postgresql_db
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    environment:
+      <<: *common-variables
+      DB_HOST_IP: 'postgresql_db'
+    ports:
+      - "3001:3001"
+
+  client:
+    container_name: React_App
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USERPOLLING=true
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - "3000:3000"
+
+  pgAdmin:
+    container_name: pgAdmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "5050:80"
+
+volumes:
+  db:
+    driver: local
+
+
