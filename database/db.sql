@@ -19,13 +19,12 @@ CREATE DATABASE crawling
 
 CREATE TABLE IF NOT EXISTS public.crawling_information
 (
-    id integer NOT NULL DEFAULT nextval('crawling_information_id_seq'::regclass),
+    id SERIAL PRIMARY KEY,
     url text COLLATE pg_catalog."default" NOT NULL,
     image_path text COLLATE pg_catalog."default",
     title text COLLATE pg_catalog."default",
     brand text COLLATE pg_catalog."default",
-    created_at timestamp without time zone NOT NULL,
-    CONSTRAINT crawling_information_pkey PRIMARY KEY (id)
+    created_at timestamp without time zone NOT NULL
 )
 
 TABLESPACE pg_default;
@@ -40,14 +39,13 @@ ALTER TABLE IF EXISTS public.crawling_information
 
 CREATE TABLE IF NOT EXISTS public.job_information
 (
+    id SERIAL PRIMARY KEY,
+    job_id text COLLATE pg_catalog."default" NOT NULL,
     job_name text COLLATE pg_catalog."default",
     job_url text COLLATE pg_catalog."default",
     status text COLLATE pg_catalog."default",
     created_at timestamp without time zone NOT NULL,
-    job_id text COLLATE pg_catalog."default" NOT NULL,
-    id integer NOT NULL DEFAULT nextval('job_information_id_seq'::regclass),
-    updated_at timestamp without time zone NOT NULL,
-    CONSTRAINT job_information_pkey PRIMARY KEY (id)
+    updated_at timestamp without time zone NOT NULL
 )
 
 TABLESPACE pg_default;
