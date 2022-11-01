@@ -133,14 +133,15 @@ function ChartData(record){
    ];
    if (record.length > 0) {
       record.forEach(function (item, index) {
+         let c=parseInt(item.count);
          if (item.status == 'failed') {
-            data[3].count = item.count;
+            data[3].count = c;
          } else if (item.status == 'in_progress') {
-            data[0].count = item.count;
+            data[0].count = c;
          } else if (item.status == 'completed') {
-            data[1].count = item.count;
+            data[1].count = c;
          } else if (item.status == 'enqueued') {
-            data[2].count = item.count;
+            data[2].count = c;
          }
       })
    }

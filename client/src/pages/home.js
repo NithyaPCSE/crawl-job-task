@@ -17,13 +17,13 @@ export function Home() {
     const setChartData = (data) =>{
         let cc_chartReal=JSON.parse(JSON.stringify(chartReal)); //hard onject copy
         if(data.status==='failed'){
-            cc_chartReal[3].count=cc_chartReal[3].count + 1;
+            cc_chartReal[3].count=parseInt(cc_chartReal[3].count) + 1;
          }else if(data.status==='in_progress'){
-            cc_chartReal[0].count=cc_chartReal[0].count + 1;
+            cc_chartReal[0].count=parseInt(cc_chartReal[0].count) + 1;
          }else if(data.status==='completed'){
-            cc_chartReal[1].count=cc_chartReal[1].count + 1;
+            cc_chartReal[1].count=parseInt(cc_chartReal[1].count) + 1;
          }else if(data.status==='enqueued'){
-            cc_chartReal[2].count=cc_chartReal[2].count + 1;
+            cc_chartReal[2].count=parseInt(cc_chartReal[2].count) + 1;
          }
         setChartRealtime(cc_chartReal);
     }
